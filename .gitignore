@@ -2,4 +2,4 @@
 venv/*
 UserApp/migrations/*
 PostApp/migrations/*
-
+media/*

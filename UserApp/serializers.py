@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
+
 from django.contrib.auth.models import User
 from .models import UserFollowing
 
@@ -65,8 +66,7 @@ FollowingSerializer for particular field for following.
 
 
 class FollowingSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(
-        source='following_user_id.username')  # to get the username of following_user_id
+    username = serializers.ReadOnlyField(source='following_user_id.username')  # to get the username of following_user_id
 
     class Meta:
         model = UserFollowing
@@ -84,3 +84,5 @@ class FollowersSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserFollowing
         fields = ['id', 'user_id', 'username', 'created']
+
+

@@ -8,7 +8,7 @@ router = routers.DefaultRouter()
 # Here, creating routes for different viewsets.
 router.register('users', UserViewset)
 router.register('userfollowings', UserFollowingViewSet,
-                basename='userfollowing')  # to see all the details of followe and following.
+                basename='userfollowing')  # to see all the details of follow and following.
 
 urlpatterns = [
     path('', include(router.urls)),
