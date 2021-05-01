@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-
-
-
 # Cascasde : if any user will be deleted the post
 # corresponding to that will also be deleted.
 class Post(models.Model):
@@ -16,13 +13,28 @@ class Post(models.Model):
         likes = Like.objects.filter(post=self)
         return len(likes)
 
+    def no_of_comment(self):
+        comments = Comment.objects.filter(post=self)
+        return len(comments)
+
+
+
+
 
 # if any post or user will be deleted, the 'like' row
 # corresponding to that will also be deleted.
 class Like(models.Model):
-    post = models.ForeignKey(Post,on_delete=models.CASCADE)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     class Meta:
         # unique_together means same user can not like the same post more than once.
         unique_together = (('user', 'post'),)
         index_together = (('user', 'post'),)
+
+
+# Comment table which is store the information about User and Post.
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.TextField(max_length=500)
