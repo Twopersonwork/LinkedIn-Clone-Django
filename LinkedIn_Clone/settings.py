@@ -85,25 +85,25 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'linkedindb',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'linkedindb',
 #         'USER': 'postgres',
-#         'PASSWORD': '556232119',
+#         'PASSWORD': os.environ.get('db_pwd'),
 #         'HOST': '127.0.0.1',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'linkedindb',
+        'USER': 'postgres',
+        'PASSWORD': '556232119',
+        'HOST': '127.0.0.1',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

@@ -3,6 +3,7 @@ from rest_framework.authtoken.models import Token
 
 from django.contrib.auth.models import User
 from .models import UserFollowing
+from PostApp.serializers import PostSerializer
 
 '''
 Validation of email . Using user model you can get the user
