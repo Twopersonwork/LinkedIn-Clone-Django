@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Post, Like
-from .serializers import PostSerializer, LikeSerializer
+from .models import Post, Like, Comment
+from .serializers import PostSerializer, LikeSerializer, CommentSerializer
 from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -20,7 +20,7 @@ def create_post(request):
 
 # queryset : set of all post objects
 # serializer_class : present them in a way mentioned in serializers.py
-class PostViewset(viewsets.ModelViewSet):
+class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -56,10 +56,40 @@ class PostViewset(viewsets.ModelViewSet):
         response = {'message': 'Disliked Post so deleted'}
         return Response(response, status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=True, methods=['POST'])
+    def comment(self, request, pk=None):
+        post = Post.objects.get(id=pk)
+        user = User.objects.get(id=request.data['user'])
+        comment = Comment.objects.create(user=user, post=post, comment=request.data['comment'])
+        serializer = CommentSerializer(comment, many=False)
+        response = {'message': 'commented on the Post', 'result': serializer.data}
+        return Response(response, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['DELETE'])
+    def uncomment(self, request, pk=None):
+
+        post = Post.objects.get(id=pk)
+        user = User.objects.get(id=request.data['user'])
+
+        try:
+            comment = Comment.objects.get(user=user, post=post)
+            comment.delete()
+        except Exception:
+            return Response({'message': "You haven't comment on the post yet."})
+
+        response = {'message': 'comment deleted'}
+        return Response(response, status=status.HTTP_204_NO_CONTENT)
+
 
 # queryset : set of all like objects
 # serializer_class : present them in a way mentioned in serializers.py
-class LikeViewset(viewsets.ModelViewSet):
+class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
+    http_method_names = ['get']
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
     http_method_names = ['get']

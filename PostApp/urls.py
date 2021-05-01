@@ -1,13 +1,14 @@
 from rest_framework import routers
 from django.conf.urls import include
 from django.urls import path
-from .views import PostViewset,create_post,LikeViewset
+from .views import PostViewSet,create_post,LikeViewSet,CommentViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
-router.register('posts',PostViewset)
-router.register('likes',LikeViewset)
+router.register('posts',PostViewSet)
+router.register('likes',LikeViewSet)
+router.register('comments',CommentViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

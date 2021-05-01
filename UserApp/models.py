@@ -18,5 +18,3 @@ class UserFollowing(models.Model):
         index_together = (('user_id', 'following_user_id'),)
         ordering = ["-created"]
 
-    def __str__(self):
-        f"{self.user_id} follows {self.following_user_id}"
