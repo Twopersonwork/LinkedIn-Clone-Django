@@ -3,6 +3,7 @@ from rest_framework.authtoken.models import Token
 
 from django.contrib.auth.models import User
 from .models import UserFollowing
+from PostApp.serializers import PostSerializer
 
 '''
 Validation of email . Using user model you can get the user
@@ -13,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
     # Adding this field into User's fields.
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
-
+    posts = PostSerializer(many=True)
     # for validate user email
     def validate_email(self, value):
         lower_email = value.lower()
@@ -24,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'username', 'last_name', 'email', 'password', 'date_joined', 'following',
-                  'followers']
+                  'followers','posts']
         # extra_kwargs for validation on some fields.
         extra_kwargs = {'password': {'write_only': True, 'required': True},
                         'first_name': {'required': True}, 'last_name': {'required': True},
@@ -61,8 +62,6 @@ class UserFollowingSerializer(serializers.ModelSerializer):
 """
 FollowingSerializer for particular field for following.
 """
-
-
 class FollowingSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='following_user_id.username')  # to get the username of following_user_id
 
