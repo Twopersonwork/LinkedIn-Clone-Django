@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 # corresponding to that will also be deleted.
 class Post(models.Model):
     body = models.TextField(max_length=500)
-    image = models.ImageField(null=True, blank=True, upload_to='post_images/')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(null=True,blank=True,upload_to='post_images/')
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
 
     def no_of_like(self):
         likes = Like.objects.filter(post=self)
@@ -16,6 +16,10 @@ class Post(models.Model):
     def no_of_comment(self):
         comments = Comment.objects.filter(post=self)
         return len(comments)
+
+
+
+
 
 # if any post or user will be deleted, the 'like' row
 # corresponding to that will also be deleted.

@@ -49,8 +49,6 @@ class UserSerializer(serializers.ModelSerializer):
 """
 You can see the follower and following using this serializer.
 """
-
-
 class UserFollowingSerializer(serializers.ModelSerializer):
     following = serializers.ReadOnlyField(source='following_user_id.username')
     follower = serializers.ReadOnlyField(source='user_id.username')
@@ -76,7 +74,6 @@ class FollowingSerializer(serializers.ModelSerializer):
 """
 FollowerSerializer for particular field for follower.
 """
-
 
 class FollowersSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='user_id.username')  # to get the username of user_id

@@ -42,13 +42,17 @@ class UserFollow(APIView):
 
     # follow another users
     def post(self, request, pk, format=None):
-        user = User.objects.get(pk=request.data['user'])
+        # user = User.objects.get(pk=request.data['user'])
+        user = request.user
         try:
             follow = self.get_object(pk)
         except Exception:
             return Response({'message': 'User does not exists '})
         try:
-            UserFollowing.objects.create(user_id=user, following_user_id=follow)
+            if user != follow:
+                UserFollowing.objects.create(user_id=user, following_user_id=follow)
+            else:
+                return Response({"message": "You can't follow yourself"})
         except Exception as e:
             return Response({"message": f"You already follow {follow}"})
 
@@ -57,7 +61,8 @@ class UserFollow(APIView):
 
     # unfollow users.
     def delete(self, request, pk, format=None):
-        user = User.objects.get(pk=request.data['user'])
+        # user = User.objects.get(pk=request.data['user'])
+        user = request.user
         try:
             follow = self.get_object(pk)
         except Exception:
