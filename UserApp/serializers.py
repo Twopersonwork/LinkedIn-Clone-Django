@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-
+from rest_framework import serializers
 
 '''
 Validation of email . Using user model you can get the user
@@ -29,3 +29,4 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)  # create user
         Token.objects.create(user=user)                     # create token for particular user
         return user
+

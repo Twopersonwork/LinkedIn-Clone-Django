@@ -8,10 +8,19 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 
 
+
+
+
 # First get the all the users and then display in a way mentioned in UserSerializers.
 class UserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+
+
+
+
 
 
 '''

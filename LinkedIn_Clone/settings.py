@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,6 +26,13 @@ SECRET_KEY = 'django-insecure-xjhvsilc1tp8n^_l1h_$bms&mpz%&ob2)e=6=*l4vj+3--9a+q
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+
+# setting the path for uploading images and videos in post model.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 
 
 # Application definition
@@ -88,7 +95,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'linkedindb',
         'USER': 'postgres',
-        'PASSWORD': '556232119',
+        'PASSWORD': '123456',
         'HOST': '127.0.0.1',
     }
 }

@@ -20,6 +20,7 @@ from UserApp.views import CustomAuthToken
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/',include('UserApp.urls')),
-    path('auth/',CustomAuthToken.as_view())     # for authentication
+    path('uapi/',include('UserApp.urls')),
+    path('auth/',CustomAuthToken.as_view()),    # for authentication
+    path('papi/',include('PostApp.urls'))
 ]
