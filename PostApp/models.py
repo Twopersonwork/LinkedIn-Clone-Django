@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 # corresponding to that will also be deleted.
 class Post(models.Model):
     body = models.TextField(max_length=500)
-    image = models.ImageField(null=True,blank=True,upload_to='images/')
+    image = models.ImageField(null=True,blank=True,upload_to='post_images/')
     user = models.ForeignKey(User,on_delete=models.CASCADE)
 
     def no_of_like(self):
