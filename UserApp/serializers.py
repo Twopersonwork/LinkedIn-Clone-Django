@@ -1,10 +1,33 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from django.contrib.auth.models import User
+from .models import User
 from .models import UserFollowing
 from PostApp.serializers import PostSerializer
 
+
+class RegistrationSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'username', 'password', 'password2']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+    def save(self):
+        account = User(
+            email=self.validated_data['email'],
+            username=self.validated_data['username']
+        )
+        password = self.validated_data['password']
+        password2 = self.validated_data['password2']
+        if password != password2:
+            raise serializers.ValidationError({'password': 'Passwords must match.'})
+        account.set_password(password)
+        account.save()
+        return account
 '''
 Validation of email . Using user model you can get the user
 and create the user.
@@ -14,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
     # Adding this field into User's fields.
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
-    posts = PostSerializer(many=True)
+    posts = PostSerializer(read_only=True,many=True)
     # for validate user email
     def validate_email(self, value):
         lower_email = value.lower()
@@ -24,11 +47,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'username', 'last_name', 'email', 'password', 'date_joined', 'following',
-                  'followers','posts']
+        fields = ['id', 'username', 'email', 'password', 'date_joined', 'following',
+                  'followers','posts','profile_pic']
         # extra_kwargs for validation on some fields.
         extra_kwargs = {'password': {'write_only': True, 'required': True},
-                        'first_name': {'required': True}, 'last_name': {'required': True},
                         'email': {'required': True}
                         }
 
@@ -41,10 +63,10 @@ class UserSerializer(serializers.ModelSerializer):
     def get_followers(self, obj):
         return FollowersSerializer(obj.followers.all(), many=True).data
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)  # create user
-        Token.objects.create(user=user)  # create token for particular user
-        return user
+    # def create(self, validated_data):
+    #     user = User.objects.create_user(**validated_data)  # create user
+    #     Token.objects.create(user=user)  # create token for particular user
+    #     return user
 
 
 """

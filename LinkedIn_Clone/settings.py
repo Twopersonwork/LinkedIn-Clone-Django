@@ -24,11 +24,24 @@ SECRET_KEY = 'django-insecure-xjhvsilc1tp8n^_l1h_$bms&mpz%&ob2)e=6=*l4vj+3--9a+q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # setting the path for uploading images and videos in post model.
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:3001',
+
+    'http://localhost:19006',
+
+]
+
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 
 # Application definition
 
@@ -44,12 +57,14 @@ INSTALLED_APPS = [
     # our apps
     'UserApp',
     'PostApp',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -73,6 +88,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = 'UserApp.User'
 
 WSGI_APPLICATION = 'LinkedIn_Clone.wsgi.application'
 

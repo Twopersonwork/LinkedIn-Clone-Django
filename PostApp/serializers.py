@@ -17,8 +17,8 @@ class CommentSerializer(serializers.ModelSerializer):
 # fields : includes fields from models which
 # is to be shown in the response in API.
 class PostSerializer(serializers.ModelSerializer):
-    likes = LikeSerializer(many=True)
-    comments = CommentSerializer(many=True)
+    likes = LikeSerializer(read_only=True,many=True)
+    comments = CommentSerializer(read_only=True,many=True)
 
     class Meta:
         model = Post
