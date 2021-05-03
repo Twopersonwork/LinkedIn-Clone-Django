@@ -1,13 +1,30 @@
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from .serializers import UserSerializer, UserFollowingSerializer
-from django.contrib.auth.models import User
+from .serializers import UserSerializer, UserFollowingSerializer,RegistrationSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from .models import UserFollowing
+from .models import UserFollowing,User
+from rest_framework.decorators import api_view
 
+
+@api_view(['POST', ])
+def registration_view(request):
+    if request.method == 'POST':
+        data = {}
+
+        serializer = RegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            account = serializer.save()
+            data['response'] = 'successfully registered new user.'
+            data['email'] = account.email
+            data['username'] = account.username
+            # token = Token.objects.get(user=account).key
+            # data['token'] = token
+        else:
+            data = serializer.errors
+        return Response(data)
 
 # First get the all the users and then display in a way mentioned in UserSerializers.
 class UserViewset(viewsets.ModelViewSet):
@@ -80,23 +97,24 @@ class UserFollow(APIView):
 Token Authentication needed so we use custome auth_token instead of ObatainAuthToken
 because it gives more flexibility.
 '''
-
-
 class CustomAuthToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
-        if User.objects.filter(username=request.data['username']).exists():
+        # in cutome User model email is essential for login but internally User takes
+        # username attribute in django.
+        if User.objects.filter(email=request.data['username']).exists():
             serializer = self.serializer_class(data=request.data,
                                                context={'request': request})
+
             if serializer.is_valid():
+                print(request.data)
                 user = serializer.validated_data['user']
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({
                     'token': token.key,
-                    'first_name': user.first_name,
-                    # 'user_id': user.pk,
-                    # 'email': user.email
+                    'username': user.username,
                 })
+            
             return Response({"error": "Please check your Username or Password", "msg": "1"},
                             status=status.HTTP_401_UNAUTHORIZED)
         else:
