@@ -27,7 +27,6 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
-
     # this will create the object in Like table for
     # respective post and user,who has liked the post.
     @action(detail=True, methods=['POST'])
