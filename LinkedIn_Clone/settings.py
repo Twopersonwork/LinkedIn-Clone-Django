@@ -33,15 +33,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:3001',
-
     'http://localhost:19006',
-
 ]
 
-
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
 
 # Application definition
 
@@ -53,11 +47,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    # for authentication
     'rest_framework.authtoken',
+    # for allow react to work with django rest framework
+    'corsheaders',
     # our apps
     'UserApp',
     'PostApp',
-    'corsheaders',
+    'ProfileApp'
 ]
 
 MIDDLEWARE = [
@@ -102,25 +99,25 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'linkedindb',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'linkedindb',
 #         'USER': 'postgres',
-#         'PASSWORD': '556232119',
+#         'PASSWORD': os.environ.get('db_pwd'),
 #         'HOST': '127.0.0.1',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'linkedindb',
+        'USER': 'postgres',
+        'PASSWORD': '556232119',
+        'HOST': '127.0.0.1',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

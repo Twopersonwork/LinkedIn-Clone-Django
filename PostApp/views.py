@@ -41,7 +41,6 @@ class PostViewSet(viewsets.ModelViewSet):
         response = {'message': 'Liked Post', 'result': serializer.data}
         return Response(response, status=status.HTTP_200_OK)
 
-
     # this will delete the object in Like table for
     # respective post and user,who has disliked the post.
     @action(detail=True, methods=['DELETE'])
@@ -56,7 +55,6 @@ class PostViewSet(viewsets.ModelViewSet):
         response = {'message': 'Disliked Post so deleted'}
         return Response(response, status=status.HTTP_204_NO_CONTENT)
 
-
     @action(detail=True, methods=['POST'])
     def comment(self, request, pk=None):
         post = Post.objects.get(id=pk)
@@ -65,7 +63,6 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = CommentSerializer(comment, many=False)
         response = {'message': 'commented on the Post', 'result': serializer.data}
         return Response(response, status=status.HTTP_200_OK)
-
 
     @action(detail=True, methods=['DELETE'])
     def uncomment(self, request, pk=None):
@@ -93,7 +90,7 @@ class LikeViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    http_method_names = ['get','delete']
+    http_method_names = ['get', 'delete']
     permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['DELETE'])
