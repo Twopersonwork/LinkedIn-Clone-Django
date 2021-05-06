@@ -105,16 +105,16 @@ class CustomAuthToken(ObtainAuthToken):
         if User.objects.filter(email=request.data['username']).exists():
             serializer = self.serializer_class(data=request.data,
                                                context={'request': request})
-
+            print(request.data)
             if serializer.is_valid():
                 print(request.data)
                 user = serializer.validated_data['user']
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({
                     'token': token.key,
-                    'username': user.username,
+                    'user': UserSerializer(user).data,
                 })
-            
+
             return Response({"error": "Please check your Username or Password", "msg": "1"},
                             status=status.HTTP_401_UNAUTHORIZED)
         else:

@@ -12,6 +12,7 @@ import datetime
 # to create the post
 @api_view(['POST'])
 def create_post(request):
+    request.data._mutable = True
     request.data['user'] = request.user.id
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():

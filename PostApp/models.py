@@ -10,7 +10,7 @@ from django.conf import settings
 
 class Post(models.Model):
     body = models.TextField(max_length=500)
-    image = models.ImageField(null=True,blank=True,upload_to='post_images/')
+    image = models.ImageField(null=True,blank=True,upload_to='post_images/',default=None)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='posts',on_delete=models.CASCADE)
     date = models.DateTimeField(default=datetime.datetime.today)
 
@@ -24,6 +24,12 @@ class Post(models.Model):
     def no_of_comment(self):
         comments = Comment.objects.filter(post=self)
         return len(comments)
+
+    # def has_liked_post(self):
+    #     if Like.objects.filter(user=self.user,post=self).count() > 0:
+    #         return True
+    #     else:
+    #         return False
 
 
 

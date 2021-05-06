@@ -38,6 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
     posts = PostSerializer(read_only=True,many=True)
+
     # for validate user email
     def validate_email(self, value):
         lower_email = value.lower()
@@ -56,6 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     # using FollowingSerializer we can get all the details of following for particular user.
     def get_following(self, obj):
+        print(obj)
         return FollowingSerializer(obj.following.all(), many=True).data
 
     # using FollowersSerializer we can get all the details of followers for particular user.
@@ -63,10 +65,6 @@ class UserSerializer(serializers.ModelSerializer):
     def get_followers(self, obj):
         return FollowersSerializer(obj.followers.all(), many=True).data
 
-    # def create(self, validated_data):
-    #     user = User.objects.create_user(**validated_data)  # create user
-    #     Token.objects.create(user=user)  # create token for particular user
-    #     return user
 
 
 """
