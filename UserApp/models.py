@@ -36,12 +36,13 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=30)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
-    profile_pic = models.ImageField(null=True,blank=True,upload_to='profile_images/')
+    profile_pic = models.ImageField(null=True, blank=True, upload_to='profile_images/')
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -63,10 +64,12 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
 
 """
 Here, there are two main fiels.
@@ -81,3 +84,7 @@ class UserFollowing(models.Model):
 
     class Meta:
         ordering = ["-created"]
+
+    def no_of_followers(self):
+        result = UserFollowing.objects.filter(following_user_id=self.following_user_id)
+        return len(result)
