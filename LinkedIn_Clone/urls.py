@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
-
+from django.conf import settings
+from django.conf.urls.static import static
 from UserApp.views import CustomAuthToken
 
 
@@ -27,5 +28,5 @@ urlpatterns = [
     path('papi/',include('PostApp.urls')),
     path('profile/',include('ProfileApp.urls'))
 ]
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
