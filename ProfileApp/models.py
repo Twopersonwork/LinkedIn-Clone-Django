@@ -35,8 +35,8 @@ class License(models.Model):
     user = models.ForeignKey(User, related_name="user_license", on_delete=models.CASCADE)
     name = models.CharField(max_length=200, blank=True, null=True)
     issuing_org = models.CharField(max_length=200, blank=True, null=True)
-    issue_date = models.DateField(blank=True, null=True)
-    expiration_date = models.DateField(blank=True, null=True)
+    issue_date = models.DateField(default=None,blank=True, null=True)
+    expiration_date = models.DateField(default=None,blank=True, null=True)
     credential_id = models.CharField(max_length=100, blank=True, null=True)
 
 
