@@ -17,7 +17,7 @@ class Profile(models.Model):
 # User about
 class About(models.Model):
     user = models.OneToOneField(User, related_name="user_about", on_delete=models.CASCADE)
-    about = models.TextField(max_length=1000, blank=True, null=True)
+    about = models.TextField(max_length=2000, blank=True, null=True)
 
 
 # User education
@@ -26,8 +26,8 @@ class Education(models.Model):
     school = models.CharField(max_length=100, blank=True, null=True)
     degree = models.CharField(max_length=100, blank=True, null=True)
     field_of_study = models.CharField(max_length=100, blank=True, null=True)
-    start_year = models.DateField(blank=True, null=True)
-    end_year = models.DateField(blank=True, null=True)
+    start_year = models.CharField(max_length=4, blank=True, null=True)
+    end_year = models.CharField(max_length=4, blank=True, null=True)
 
 
 # For user license and certifications
@@ -35,8 +35,8 @@ class License(models.Model):
     user = models.ForeignKey(User, related_name="user_license", on_delete=models.CASCADE)
     name = models.CharField(max_length=200, blank=True, null=True)
     issuing_org = models.CharField(max_length=200, blank=True, null=True)
-    issue_date = models.DateField(blank=True, null=True)
-    expiration_date = models.DateField(blank=True, null=True)
+    issue_date = models.DateField(default=None,blank=True, null=True)
+    expiration_date = models.DateField(default=None,blank=True, null=True)
     credential_id = models.CharField(max_length=100, blank=True, null=True)
 
 
