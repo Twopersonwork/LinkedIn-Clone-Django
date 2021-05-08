@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from .models import Post, Like, Comment
 
+
 class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Like
         fields = ['id','post','user']
+
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -17,12 +19,12 @@ class CommentSerializer(serializers.ModelSerializer):
 # fields : includes fields from models which
 # is to be shown in the response in API.
 class PostSerializer(serializers.ModelSerializer):
-    likes = LikeSerializer(read_only=True,many=True)
-    comments = CommentSerializer(read_only=True,many=True)
+    likes = LikeSerializer(read_only=True, many=True)
+    comments = CommentSerializer(read_only=True, many=True)
 
     class Meta:
         model = Post
-        fields = ['id','body','image','user','likes','comments','no_of_like','no_of_comment']
+        fields = ['id', 'body', 'image', 'user', 'likes', 'comments', 'no_of_like', 'no_of_comment']
 
     # def get_likes(self, obj):
     #     return LikesSerializer(obj.user.all(), many=True).data
@@ -43,8 +45,3 @@ class PostSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Comment
 #         fields = ['id','username']
-
-
-
-
-

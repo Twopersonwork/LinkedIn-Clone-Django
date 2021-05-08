@@ -4,6 +4,7 @@ from rest_framework.authtoken.models import Token
 from .models import User
 from .models import UserFollowing
 from PostApp.serializers import PostSerializer
+from ProfileApp.serializers import ProfileSerializers
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -28,16 +29,21 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.set_password(password)
         account.save()
         return account
+
+
 '''
 Validation of email . Using user model you can get the user
 and create the user.
 '''
 
+
 class UserSerializer(serializers.ModelSerializer):
     # Adding this field into User's fields.
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
-    posts = PostSerializer(read_only=True,many=True)
+
+    posts = PostSerializer(read_only=True, many=True)
+    user_profile = ProfileSerializers(read_only=True)
 
     # for validate user email
     def validate_email(self, value):
@@ -49,7 +55,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'date_joined', 'following',
-                  'followers','posts','profile_pic']
+                  'followers', 'posts', 'profile_pic', 'user_profile']
         # extra_kwargs for validation on some fields.
         extra_kwargs = {'password': {'write_only': True, 'required': True},
                         'email': {'required': True}
@@ -70,20 +76,25 @@ class UserSerializer(serializers.ModelSerializer):
 """
 You can see the follower and following using this serializer.
 """
+
+
 class UserFollowingSerializer(serializers.ModelSerializer):
     following = serializers.ReadOnlyField(source='following_user_id.username')
     follower = serializers.ReadOnlyField(source='user_id.username')
 
     class Meta:
         model = UserFollowing
-        fields = ['id', 'created', 'following', 'follower']
+        fields = ['id', 'created', 'following', 'follower', 'no_of_followers']
 
 
 """
 FollowingSerializer for particular field for following.
 """
+
+
 class FollowingSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(source='following_user_id.username')  # to get the username of following_user_id
+    username = serializers.ReadOnlyField(
+        source='following_user_id.username')  # to get the username of following_user_id
 
     class Meta:
         model = UserFollowing
@@ -94,11 +105,10 @@ class FollowingSerializer(serializers.ModelSerializer):
 FollowerSerializer for particular field for follower.
 """
 
+
 class FollowersSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='user_id.username')  # to get the username of user_id
 
     class Meta:
         model = UserFollowing
         fields = ['id', 'user_id', 'username', 'created']
-
-

@@ -2,4 +2,5 @@
 venv/*
 UserApp/migrations/*
 PostApp/migrations/*
+ProfileApp/migrations/*
 media/*

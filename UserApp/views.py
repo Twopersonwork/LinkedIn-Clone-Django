@@ -1,13 +1,13 @@
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from .serializers import UserSerializer, UserFollowingSerializer,RegistrationSerializer
+from .serializers import UserSerializer, UserFollowingSerializer, RegistrationSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from .models import UserFollowing,User
+from .models import UserFollowing, User
 from rest_framework.decorators import api_view
-
+from ProfileApp.serializers import ProfileSerializers
 
 @api_view(['POST', ])
 def registration_view(request):
@@ -18,18 +18,20 @@ def registration_view(request):
         if serializer.is_valid():
             account = serializer.save()
             data['response'] = 'successfully registered new user.'
-            data['email'] = account.email
-            data['username'] = account.username
+            # data['email'] = account.email
+            # data['username'] = account.username
             # token = Token.objects.get(user=account).key
             # data['token'] = token
         else:
             data = serializer.errors
         return Response(data)
 
+
 # First get the all the users and then display in a way mentioned in UserSerializers.
 class UserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    http_method_names = ['get']
 
 
 # To see following and followers of all the users.
@@ -97,6 +99,8 @@ class UserFollow(APIView):
 Token Authentication needed so we use custome auth_token instead of ObatainAuthToken
 because it gives more flexibility.
 '''
+
+
 class CustomAuthToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
@@ -110,12 +114,15 @@ class CustomAuthToken(ObtainAuthToken):
                 print(request.data)
                 user = serializer.validated_data['user']
                 token, created = Token.objects.get_or_create(user=user)
+                user_data = UserSerializer(user).data
                 return Response({
                     'token': token.key,
-                    'user': UserSerializer(user).data,
+
+                    'user': user_data,
                 })
 
-            return Response({"error": "Please check your Username or Password", "msg": "1"},
+            return Response({"chk_uname_or_pwd": "Please check your Password"},
                             status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({"error": "User does not exixts", "msg": "2"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"user_not_found": "User does not exixts with this email address"},
+                            status=status.HTTP_404_NOT_FOUND)
