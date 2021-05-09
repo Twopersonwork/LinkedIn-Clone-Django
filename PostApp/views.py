@@ -28,6 +28,10 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
+    # this method is for update
+    def put(self, request, pk, *args, **kwargs):
+        return self.update(request, pk, *args, **kwargs)
+
     # this will create the object in Like table for
     # respective post and user,who has liked the post.
     @action(detail=True, methods=['POST'])
@@ -93,6 +97,10 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     http_method_names = ['get', 'delete']
     permission_classes = [IsAuthenticated]
+
+    # this method is for update
+    def put(self, request, pk, *args, **kwargs):
+        return self.update(request, pk, *args, **kwargs)
 
     @action(detail=True, methods=['DELETE'])
     def uncomment(self, request, pk=None):

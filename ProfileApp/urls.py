@@ -11,5 +11,4 @@ router.register('skills',SkillViewSet)
 router.register('about',AboutViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
-]
+    path('', include(router.urls))]
