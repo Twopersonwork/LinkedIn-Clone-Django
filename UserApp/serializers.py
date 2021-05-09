@@ -4,7 +4,8 @@ from rest_framework.authtoken.models import Token
 from .models import User
 from .models import UserFollowing
 from PostApp.serializers import PostSerializer
-from ProfileApp.serializers import ProfileSerializers, AboutSerializers, EducationSerializers, LicenseSerializer
+from ProfileApp.serializers import ProfileSerializers, AboutSerializers, EducationSerializers, LicenseSerializer, \
+    SkillSerializer
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -47,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
     user_about = AboutSerializers(read_only=True)
     user_education = EducationSerializers(read_only=True, many=True)
     user_license = LicenseSerializer(read_only=True, many=True)
+    user_skills = SkillSerializer(read_only=True, many=True)
 
     # for validate user email
     def validate_email(self, value):
@@ -58,7 +60,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'date_joined', 'following',
-                  'followers', 'posts', 'profile_pic', 'user_profile', 'user_about', 'user_education','user_license']
+                  'followers', 'posts', 'profile_pic', 'user_profile', 'user_about',
+                  'user_education', 'user_license', 'user_skills']
         # extra_kwargs for validation on some fields.
         extra_kwargs = {'password': {'write_only': True, 'required': True},
                         'email': {'required': True}
