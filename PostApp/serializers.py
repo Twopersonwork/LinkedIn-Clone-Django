@@ -6,7 +6,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Like
-        fields = ['id','post','user']
+        fields = "__all__"
 
 
 

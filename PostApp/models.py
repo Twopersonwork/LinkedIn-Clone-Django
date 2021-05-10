@@ -9,10 +9,8 @@ from django.conf import settings
 
 class Post(models.Model):
     body = models.TextField(max_length=500)
-
     image = models.ImageField(null=True,blank=True,upload_to='post_images/',default=None)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='posts',on_delete=models.CASCADE)
-
     date = models.DateTimeField(default=datetime.datetime.today)
 
     class Meta:
@@ -37,9 +35,13 @@ class Post(models.Model):
 # corresponding to that will also be deleted.
 class Like(models.Model):
     post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='likes', on_delete=models.CASCADE)
+    date = models.DateTimeField(default=datetime.datetime.today)
+
 
     class Meta:
+        ordering = ["-date"]
+
         # unique_together means same user can not like the same post more than once.
         unique_together = (('user', 'post'),)
         index_together = (('user', 'post'),)
@@ -48,5 +50,9 @@ class Like(models.Model):
 # Comment table which is store the information about User and Post.
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments', on_delete=models.CASCADE)
     comment = models.TextField(max_length=500)
+    date = models.DateTimeField(default=datetime.datetime.today)
+
+    class Meta:
+        ordering = ["-date"]
