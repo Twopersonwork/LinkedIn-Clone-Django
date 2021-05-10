@@ -16,9 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
+from UserApp.views import CustomAuthToken
 from django.conf import settings
 from django.conf.urls.static import static
-from UserApp.views import CustomAuthToken
 
 
 urlpatterns = [

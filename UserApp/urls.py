@@ -14,5 +14,7 @@ urlpatterns = [
     path('', include(router.urls)),
     # to Follow,Get the detail, Unfollow
     path('follow/<int:pk>/', UserFollow.as_view(), name='user-follow'),
-    path('register/', registration_view)
+    path('register/', registration_view),
+
+
 ]

@@ -6,12 +6,13 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-import datetime
+
 
 
 # to create the post
 @api_view(['POST'])
 def create_post(request):
+    request.data._mutable = True
     request.data['user'] = request.user.id
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
@@ -26,6 +27,10 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
+
+    # this method is for update
+    def put(self, request, pk, *args, **kwargs):
+        return self.update(request, pk, *args, **kwargs)
 
     # this will create the object in Like table for
     # respective post and user,who has liked the post.
@@ -59,8 +64,8 @@ class PostViewSet(viewsets.ModelViewSet):
     def comment(self, request, pk=None):
         post = Post.objects.get(id=pk)
         user = request.user
-        comment = Comment.objects.create(user=user, post=post, comment=request.data['comment'])
-        serializer = CommentSerializer(comment, many=False)
+        comm = Comment.objects.create(user=user, post=post, comment=request.data['comment'])
+        serializer = CommentSerializer(comm, many=False)
         response = {'message': 'commented on the Post', 'result': serializer.data}
         return Response(response, status=status.HTTP_200_OK)
 
@@ -92,6 +97,10 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     http_method_names = ['get', 'delete']
     permission_classes = [IsAuthenticated]
+
+    # this method is for update
+    def put(self, request, pk, *args, **kwargs):
+        return self.update(request, pk, *args, **kwargs)
 
     @action(detail=True, methods=['DELETE'])
     def uncomment(self, request, pk=None):
