@@ -6,6 +6,16 @@ from .models import UserFollowing
 from PostApp.serializers import PostSerializer
 from ProfileApp.serializers import ProfileSerializers, AboutSerializers, EducationSerializers, LicenseSerializer, \
     SkillSerializer
+from itertools import chain
+from PostApp.serializers import LikeSerializer,CommentSerializer
+from PostApp.models import Like,Comment
+from rest_framework.response import Response
+from django.http import HttpResponse
+import json
+from django.http import JsonResponse
+from django.core.serializers import serialize
+
+
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -42,6 +52,7 @@ class UserSerializer(serializers.ModelSerializer):
     # Adding this field into User's fields.
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
+    activities = serializers.SerializerMethodField()
     posts = PostSerializer(read_only=True, many=True)
     user_profile = ProfileSerializers(read_only=True)
     user_about = AboutSerializers(read_only=True)
@@ -60,7 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'password', 'date_joined', 'following',
                   'followers', 'posts', 'profile_pic', 'user_profile', 'user_about',
-                  'user_education', 'user_license', 'user_skills']
+                  'user_education', 'user_license', 'user_skills','activities']
         # extra_kwargs for validation on some fields.
         extra_kwargs = {'password': {'write_only': True, 'required': True},
                         'email': {'required': True}
@@ -68,6 +79,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     # using FollowingSerializer we can get all the details of following for particular user.
     def get_following(self, obj):
+        print(obj)
         return FollowingSerializer(obj.following.all(), many=True).data
 
     # using FollowersSerializer we can get all the details of followers for particular user.
@@ -75,10 +87,14 @@ class UserSerializer(serializers.ModelSerializer):
     def get_followers(self, obj):
         return FollowersSerializer(obj.followers.all(), many=True).data
 
-    # def create(self, validated_data):
-    #     user = User.objects.create_user(**validated_data)  # create user
-    #     Token.objects.create(user=user)  # create token for particular user
-    #     return user
+    def get_activities(self, obj):
+        likes = LikeSerializer(obj.likes.all(), many=True).data
+        comments = CommentSerializer(obj.comments.all(), many=True).data
+        l = likes + comments
+        activities = sorted(l, key=lambda x: x['date'], reverse=True)
+        activities = json.loads(json.dumps(activities, indent=4))
+        return activities
+
 
 
 """

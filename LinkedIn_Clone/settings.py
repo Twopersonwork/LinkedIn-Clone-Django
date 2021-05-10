@@ -37,6 +37,7 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -114,7 +115,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'linkedindb',
         'USER': 'postgres',
-        'PASSWORD': '556232119',
+        'PASSWORD': '123456',
         'HOST': '127.0.0.1',
     }
 }

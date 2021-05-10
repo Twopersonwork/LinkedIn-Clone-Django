@@ -6,6 +6,10 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from PostApp.models import Like,Comment
+from itertools import chain
+from django.core import serializers
+from django.http import JsonResponse
 
 
 class MyAccountManager(BaseUserManager):
@@ -42,7 +46,7 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=30)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
-    profile_pic = models.ImageField(null=True, blank=True, upload_to='profile_images/')
+    profile_pic = models.ImageField(upload_to='profile_images/',default='profile_images/user.svg')
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -63,6 +67,10 @@ class User(AbstractBaseUser):
     # Does this user have permission to view this app? (ALWAYS YES FOR SIMPLICITY)
     def has_module_perms(self, app_label):
         return True
+
+
+
+
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

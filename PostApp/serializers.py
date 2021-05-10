@@ -3,9 +3,11 @@ from .models import Post, Like, Comment
 
 
 class LikeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Like
         fields = "__all__"
+
 
 
 class CommentSerializer(serializers.ModelSerializer):

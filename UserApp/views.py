@@ -7,6 +7,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from .models import UserFollowing, User
 from rest_framework.decorators import api_view
+from rest_framework.decorators import action
+from .serializers import FollowingSerializer
+
 from ProfileApp.serializers import ProfileSerializers
 
 @api_view(['POST', ])
@@ -31,7 +34,42 @@ def registration_view(request):
 class UserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    http_method_names = ['get']
+    http_method_names = ['get','put','delete']
+
+    @action(detail=True, methods=['PUT'])
+    # this method is for update
+    def update_user(self, request,pk=None):
+        user = User.objects.get(id=pk)
+
+        if 'profile_pic' in request.data:
+            setattr(user, "profile_pic", request.data['profile_pic'])
+            # user['profile_pic'] = request.data['profile_pic']
+            user.save()
+        if 'username' in request.data:
+            setattr(user, "username", request.data['username'])
+
+            # user['username'] = request.data['username']
+            user.save()
+        serializer = UserSerializer(user,many=False)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['DELETE'])
+    # this method is for update
+    def delete_profile_pic(self, request, pk=None):
+        user = User.objects.get(id=pk)
+        user.profile_pic.delete(save=False)
+        user.profile_pic = 'profile_images/user.svg'
+        user.save()
+
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['GET'])
+    # this method is for update
+    def no_of_follow(self, request,pk=None,format=None):
+        user = User.objects.get(id=pk)
+        return Response({"no_followers":len(UserSerializer(user).data['followers']),"no_following": len(UserSerializer(user).data['following'])})
+
 
 
 # To see following and followers of all the users.
@@ -109,7 +147,7 @@ class CustomAuthToken(ObtainAuthToken):
         if User.objects.filter(email=request.data['username']).exists():
             serializer = self.serializer_class(data=request.data,
                                                context={'request': request})
-
+            print(request.data)
             if serializer.is_valid():
                 print(request.data)
                 user = serializer.validated_data['user']
@@ -117,6 +155,7 @@ class CustomAuthToken(ObtainAuthToken):
                 user_data = UserSerializer(user).data
                 return Response({
                     'token': token.key,
+
                     'user': user_data,
                 })
 
