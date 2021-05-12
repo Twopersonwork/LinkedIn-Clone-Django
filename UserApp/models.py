@@ -92,7 +92,23 @@ class UserFollowing(models.Model):
 
     class Meta:
         ordering = ["-created"]
+        unique_together = (('user_id', 'following_user_id'),)
 
     def no_of_followers(self):
         result = UserFollowing.objects.filter(following_user_id=self.following_user_id)
+        return len(result)
+
+
+class WaitingList(models.Model):
+    user_id = models.ForeignKey(User, related_name="wait_following", on_delete=models.CASCADE)
+    following_user_id = models.ForeignKey(User, related_name="wait_followers", on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["-created"]
+        unique_together = (('user_id', 'following_user_id'),)
+
+
+    def no_of_wait_followers(self):
+        result = WaitingList.objects.filter(following_user_id=self.following_user_id)
         return len(result)

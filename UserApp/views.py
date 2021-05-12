@@ -1,11 +1,11 @@
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from .serializers import UserSerializer, UserFollowingSerializer, RegistrationSerializer
+from .serializers import UserSerializer, UserFollowingSerializer, RegistrationSerializer,UserDetailSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from .models import UserFollowing, User
+from .models import UserFollowing, User,WaitingList
 from rest_framework.decorators import api_view
 from rest_framework.decorators import action
 from .serializers import FollowingSerializer
@@ -70,7 +70,10 @@ class UserViewset(viewsets.ModelViewSet):
         user = User.objects.get(id=pk)
         return Response({"no_followers":len(UserSerializer(user).data['followers']),"no_following": len(UserSerializer(user).data['following'])})
 
-
+class UserDetailViewset(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserDetailSerializer
+    http_method_names = ['get']
 
 # To see following and followers of all the users.
 class UserFollowingViewSet(viewsets.ModelViewSet):
@@ -132,6 +135,57 @@ class UserFollow(APIView):
         # serializer = UserSerializer(follow)
         return Response({'message': f'You unfollowed {follow}'})
 
+class WaitFollow(APIView):
+    # return user if user exist
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise ValueError
+
+    # get the users follow details.
+    def get(self, request, pk, format=None):
+        try:
+            user = self.get_object(pk)
+        except Exception:
+            return Response({'message': 'User does not exists '})
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    # follow another users
+    def post(self, request, pk, format=None):
+        # user = User.objects.get(pk=request.data['user'])
+        user = request.user
+        try:
+            follow = self.get_object(pk)
+        except Exception:
+            return Response({'message': 'User does not exists '})
+        try:
+            if user != follow:
+                WaitingList.objects.create(user_id=user, following_user_id=follow)
+            else:
+                return Response({"message": "You can't follow yourself"})
+        except Exception as e:
+            return Response({"message": f"You already follow {follow}"})
+
+        # serializer = UserSerializer(follow)
+        return Response({'message': f'You follow {follow}'})
+
+    # unfollow users.
+    def delete(self, request, pk, format=None):
+        # user = User.objects.get(pk=request.data['user'])
+        follow = request.user
+        try:
+            user = self.get_object(pk)
+        except Exception:
+            return Response({'message': 'User does not exists '})
+        try:
+            connection = WaitingList.objects.filter(user_id=user, following_user_id=follow).first()
+            connection.delete()
+        except Exception:
+            return Response({'message': f"You don't follow {follow}"})
+        # serializer = UserSerializer(follow)
+        return Response({'message': f'You unfollowed {follow}'})
 
 '''
 Token Authentication needed so we use custome auth_token instead of ObatainAuthToken
