@@ -1,19 +1,11 @@
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
 
-from .models import User
-from .models import UserFollowing
-from PostApp.serializers import PostSerializer
+from .models import User,UserFollowing,WaitingList
+from PostApp.serializers import PostSerializer,LikeSerializer,CommentSerializer
 from ProfileApp.serializers import ProfileSerializers, AboutSerializers, EducationSerializers, LicenseSerializer, \
     SkillSerializer
-from itertools import chain
-from PostApp.serializers import LikeSerializer,CommentSerializer
-from PostApp.models import Like,Comment
-from rest_framework.response import Response
-from django.http import HttpResponse
 import json
-from django.http import JsonResponse
-from django.core.serializers import serialize
+
 
 
 
@@ -53,6 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
     activities = serializers.SerializerMethodField()
+    waitFollowers = serializers.SerializerMethodField()
     posts = PostSerializer(read_only=True, many=True)
     user_profile = ProfileSerializers(read_only=True)
     user_about = AboutSerializers(read_only=True)
@@ -71,7 +64,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'password', 'date_joined', 'following',
                   'followers', 'posts', 'profile_pic', 'user_profile', 'user_about',
-                  'user_education', 'user_license', 'user_skills','activities']
+                  'user_education', 'user_license', 'user_skills','activities','waitFollowers']
         # extra_kwargs for validation on some fields.
         extra_kwargs = {'password': {'write_only': True, 'required': True},
                         'email': {'required': True}
@@ -79,7 +72,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     # using FollowingSerializer we can get all the details of following for particular user.
     def get_following(self, obj):
-        print(obj)
         return FollowingSerializer(obj.following.all(), many=True).data
 
     # using FollowersSerializer we can get all the details of followers for particular user.
@@ -95,7 +87,14 @@ class UserSerializer(serializers.ModelSerializer):
         activities = json.loads(json.dumps(activities, indent=4))
         return activities
 
+    def get_waitFollowers(self,obj):
+        return WaitFollowersSerializer(obj.wait_followers.all(),many=True).data
 
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','username','profile_pic']
 
 """
 You can see the follower and following using this serializer.
@@ -136,3 +135,19 @@ class FollowersSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserFollowing
         fields = ['id', 'user_id', 'username', 'created']
+
+
+class WaitFollowersSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user_id.username')  # to get the username of user_id
+
+    class Meta:
+        model = WaitingList
+        fields = ['id', 'user_id', 'username', 'created']
+
+class WaitFollowingSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(
+        source='following_user_id.username')  # to get the username of following_user_id
+
+    class Meta:
+        model = UserFollowing
+        fields = ['id', 'following_user_id', 'username', 'created']
