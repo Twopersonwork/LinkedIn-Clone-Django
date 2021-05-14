@@ -8,9 +8,9 @@ from rest_framework import status
 from .models import UserFollowing, User,WaitingList
 from rest_framework.decorators import api_view
 from rest_framework.decorators import action
-from .serializers import FollowingSerializer
-
-from ProfileApp.serializers import ProfileSerializers
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+import os
 
 @api_view(['POST', ])
 def registration_view(request):
@@ -36,29 +36,85 @@ class UserViewset(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     http_method_names = ['get','put','delete']
 
+    # @receiver(pre_save, sender=User)
+    # def delete_old_file(self,sender,attr,**kwargs):
+    #     # on creation, signal callback won't be triggered
+    #     if self._state.adding and not self.pk:
+    #         return False
+    #
+    #     try:
+    #         if attr=='profile_pic':
+    #             old_file = sender.objects.get(pk=self.pk).profile_pic.file
+    #         else:
+    #             old_file = sender.objects.get(pk=self.pk).cover_pic.file
+    #
+    #     except sender.DoesNotExist:
+    #         return False
+    #     # comparing the new file with the old one
+    #     if attr == 'profile_pic':
+    #         file = self.profile_pic.file
+    #     else:
+    #         file = self.cover_pic.file
+    #     print(type(old_file),old_file.name)
+    #     if not old_file == file:
+    #         if os.path.isfile(old_file.name):
+    #             os.remove(old_file.name)
+
     @action(detail=True, methods=['PUT'])
     # this method is for update
     def update_user(self, request,pk=None):
         user = User.objects.get(id=pk)
 
         if 'profile_pic' in request.data:
+            old_file = User.objects.get(pk=user.pk).profile_pic.file
+            # comparing the new file with the old one
+            file = user.profile_pic.file
+            print(type(old_file), old_file.name)
+            if 'defaults'!=str(file).split("/")[-2]:
+                if not old_file == file:
+                    if os.path.isfile(old_file.name):
+                        os.remove(old_file.name)
             setattr(user, "profile_pic", request.data['profile_pic'])
-            # user['profile_pic'] = request.data['profile_pic']
             user.save()
+
+        if 'cover_pic' in request.data:
+            old_file = User.objects.get(pk=user.pk).cover_pic.file
+            # comparing the new file with the old one
+            file = user.cover_pic.file
+            print(type(old_file), old_file.name)
+            if 'defaults'!=str(file).split("/")[-2]:
+                if not old_file == file:
+                    if os.path.isfile(old_file.name):
+                        os.remove(old_file.name)
+            setattr(user, "cover_pic", request.data['cover_pic'])
+            user.save()
+
+
         if 'username' in request.data:
             setattr(user, "username", request.data['username'])
-
-            # user['username'] = request.data['username']
             user.save()
         serializer = UserSerializer(user,many=False)
         return Response(serializer.data)
+
+
 
     @action(detail=True, methods=['DELETE'])
     # this method is for update
     def delete_profile_pic(self, request, pk=None):
         user = User.objects.get(id=pk)
         user.profile_pic.delete(save=False)
-        user.profile_pic = 'profile_images/user.svg'
+        user.profile_pic = 'defaults/profile.svg'
+        user.save()
+
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['DELETE'])
+    # this method is for update
+    def delete_cover_pic(self, request, pk=None):
+        user = User.objects.get(id=pk)
+        user.cover_pic.delete(save=False)
+        user.cover_pic = 'defaults/cover.jpeg'
         user.save()
 
         serializer = UserSerializer(user, many=False)

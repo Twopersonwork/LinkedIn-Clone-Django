@@ -63,7 +63,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'date_joined', 'following',
-                  'followers', 'posts', 'profile_pic', 'user_profile', 'user_about',
+                  'followers', 'posts', 'profile_pic', 'cover_pic','user_profile', 'user_about',
                   'user_education', 'user_license', 'user_skills','activities','waitFollowers']
         # extra_kwargs for validation on some fields.
         extra_kwargs = {'password': {'write_only': True, 'required': True},
@@ -94,7 +94,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','username','profile_pic']
+        fields = ['id','username','profile_pic','cover_pic']
 
 """
 You can see the follower and following using this serializer.
