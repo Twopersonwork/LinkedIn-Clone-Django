@@ -46,7 +46,9 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=30)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
-    profile_pic = models.ImageField(upload_to='profile_images/',default='profile_images/user.svg')
+    profile_pic = models.ImageField(upload_to='profile_images/',default='defaults/profile.svg')
+    cover_pic = models.ImageField(upload_to='cover_images/',default='defaults/cover.jpeg')
+
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
