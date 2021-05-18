@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -109,26 +110,31 @@ REST_FRAMEWORK = {
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'linkedindb',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'darbt3oa5uom0e',
-#         'USER': 'pyahqwjpallcdp',
-#         'PASSWORD': '3248d0096c43dfa0d9f07ff7333809ce6a82b83044f587cb65484f0011398ba4',
-#         'HOST': 'ec2-34-206-8-52.compute-1.amazonaws.com',
-#         'PORT': '5432',
-#     },
+#         'NAME': 'linkedindb',
+#         'USER': 'postgres',
+#         'PASSWORD': '123456',
+#         'HOST': '127.0.0.1',
+#     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'darbt3oa5uom0e',
+        'USER': 'pyahqwjpallcdp',
+        'PASSWORD': '3248d0096c43dfa0d9f07ff7333809ce6a82b83044f587cb65484f0011398ba4',
+        'HOST': 'ec2-34-206-8-52.compute-1.amazonaws.com',
+        'PORT': '5432',
+    },
+}
+
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
