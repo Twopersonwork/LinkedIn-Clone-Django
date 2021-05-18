@@ -37,7 +37,6 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -119,6 +118,17 @@ DATABASES = {
         'HOST': '127.0.0.1',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'darbt3oa5uom0e',
+#         'USER': 'pyahqwjpallcdp',
+#         'PASSWORD': '3248d0096c43dfa0d9f07ff7333809ce6a82b83044f587cb65484f0011398ba4',
+#         'HOST': 'ec2-34-206-8-52.compute-1.amazonaws.com',
+#         'PORT': '5432',
+#     },
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

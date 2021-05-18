@@ -48,7 +48,6 @@ class User(AbstractBaseUser):
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     profile_pic = models.ImageField(upload_to='profile_images/',default='defaults/profile.svg')
     cover_pic = models.ImageField(upload_to='cover_images/',default='defaults/cover.jpeg')
-
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -94,7 +93,8 @@ class UserFollowing(models.Model):
 
     class Meta:
         ordering = ["-created"]
-        unique_together = (('user_id', 'following_user_id'),)
+        unique_together = [['user_id', 'following_user_id']]
+
 
     def no_of_followers(self):
         result = UserFollowing.objects.filter(following_user_id=self.following_user_id)
@@ -108,8 +108,7 @@ class WaitingList(models.Model):
 
     class Meta:
         ordering = ["-created"]
-        unique_together = (('user_id', 'following_user_id'),)
-
+        unique_together = [['user_id', 'following_user_id']]
 
     def no_of_wait_followers(self):
         result = WaitingList.objects.filter(following_user_id=self.following_user_id)
