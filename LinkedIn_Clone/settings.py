@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import cloudinary_storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    #for image storage on cloudinary
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'rest_framework',
     # for authentication
@@ -59,9 +62,7 @@ INSTALLED_APPS = [
     'UserApp',
     'PostApp',
     'ProfileApp'
-    #for image storage on cloudinary
-    'cloudinary_storage',
-    'cloudinary',
+
 ]
 
 MIDDLEWARE = [
