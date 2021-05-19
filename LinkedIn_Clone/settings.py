@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
-import django_on_heroku
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,6 +29,8 @@ ALLOWED_HOSTS = ['*']
 # setting the path for uploading images and videos in post model.
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# for cloudinary storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
@@ -58,6 +59,9 @@ INSTALLED_APPS = [
     'UserApp',
     'PostApp',
     'ProfileApp'
+    #for image storage on cloudinary
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -138,6 +142,12 @@ import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
+# credentials for CLOUDINARY_STORAGE
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'mindflowingblog',
+    'API_KEY': '567811753678262',
+    'API_SECRET': '1ekQ3qVaUyaWI4GJ6ifotljGVJo'
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -181,4 +191,4 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # activate heroku settings for djnago
-django_on_heroku.settings(locals())
+# django_on_heroku.settings(locals())

@@ -1,0 +1,42 @@
+Metadata-Version: 1.1
+Name: django-googledrive-storage
+Version: 1.5.2
+Summary: Storage implementation for Django that interacts with Google Drive
+Home-page: https://github.com/torre76/django-googledrive-storage
+Author: Gian Luca Dalla Torre
+Author-email: gianluca.dallatorre@gmail.com
+License: LICENSE.txt
+Download-URL: https://github.com/torre76/django-googledrive-storage/tarball/1.5.2
+Description: ===========================
+        Django Google Drive Storage
+        ===========================
+        
+        |build-status| |pypi| |docs|
+        
+        This is a `Django Storage <https://docs.djangoproject.com/en/1.7/ref/files/storage/>`_ implementation that uses `Google Drive <https://drive.google.com>`_ as backend for storing data.
+        
+        Documentation and Installation instructions
+        -------------------------------------------
+        
+        Documentation and installation instructions can be found at `Read The Docs <http://django-googledrive-storage.readthedocs.org/>`_.
+        
+        .. |build-status| image:: https://travis-ci.org/torre76/django-googledrive-storage.svg?branch=master
+            :target: https://travis-ci.org/torre76/django-googledrive-storage
+            :alt: Travis CI status
+        
+        .. |pypi| image:: https://img.shields.io/pypi/v/django-googledrive-storage.svg
+            :target: https://pypi.python.org/pypi/django-googledrive-storage/
+            :alt: django-googledrive-storage on Pypi
+        
+        .. |docs| image:: https://readthedocs.org/projects/django-googledrive-storage/badge/?version=latest
+            :target: http://django-googledrive-storage.readthedocs.org/en/latest/?badge=latest
+            :alt: Documentation Status
+        
+Keywords: django google drive storage googledrive
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Framework :: Django
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8

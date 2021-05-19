@@ -12,6 +12,7 @@ from django.core import serializers
 from django.http import JsonResponse
 
 
+
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
         if not email:
