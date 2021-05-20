@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import cloudinary_storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,11 +30,15 @@ ALLOWED_HOSTS = ['*']
 # setting the path for uploading images and videos in post model.
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# for cloudinary storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:19006',
+    'https://ditto-linkedin.herokuapp.com',
+    'http://ditto-linkedin.herokuapp.com'
 ]
 
 
@@ -45,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    #for image storage on cloudinary
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'rest_framework',
     # for authentication
@@ -55,11 +62,13 @@ INSTALLED_APPS = [
     'UserApp',
     'PostApp',
     'ProfileApp'
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -109,26 +118,37 @@ REST_FRAMEWORK = {
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'linkedindb',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'darbt3oa5uom0e',
-#         'USER': 'pyahqwjpallcdp',
-#         'PASSWORD': '3248d0096c43dfa0d9f07ff7333809ce6a82b83044f587cb65484f0011398ba4',
-#         'HOST': 'ec2-34-206-8-52.compute-1.amazonaws.com',
-#         'PORT': '5432',
-#     },
+#         'NAME': 'linkedindb',
+#         'USER': 'postgres',
+#         'PASSWORD': '123456',
+#         'HOST': '127.0.0.1',
+#     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'darbt3oa5uom0e',
+        'USER': 'pyahqwjpallcdp',
+        'PASSWORD': '3248d0096c43dfa0d9f07ff7333809ce6a82b83044f587cb65484f0011398ba4',
+        'HOST': 'ec2-34-206-8-52.compute-1.amazonaws.com',
+        'PORT': '5432',
+    },
+}
+
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
+# credentials for CLOUDINARY_STORAGE
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'mindflowingblog',
+    'API_KEY': '567811753678262',
+    'API_SECRET': '1ekQ3qVaUyaWI4GJ6ifotljGVJo'
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -170,3 +190,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# activate heroku settings for djnago
+# django_on_heroku.settings(locals())
