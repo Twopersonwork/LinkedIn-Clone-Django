@@ -6,11 +6,8 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-from PostApp.models import Like,Comment
-from itertools import chain
-from django.core import serializers
-from django.http import JsonResponse
-
+from django.db.models.signals import pre_delete
+import cloudinary
 
 
 class MyAccountManager(BaseUserManager):
@@ -71,8 +68,9 @@ class User(AbstractBaseUser):
         return True
 
 
-
-
+@receiver(pre_delete, sender=settings.AUTH_USER_MODEL)
+def photo_delete(sender, instance, **kwargs):
+    cloudinary.uploader.destroy(instance.image.public_id)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
