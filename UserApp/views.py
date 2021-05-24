@@ -66,26 +66,28 @@ class UserViewset(viewsets.ModelViewSet):
         user = User.objects.get(id=pk)
 
         if 'profile_pic' in request.data:
-            old_file = User.objects.get(pk=user.pk).profile_pic.file
-            # comparing the new file with the old one
-            file = user.profile_pic.file
-            print(type(old_file), old_file.name)
-            if 'defaults'!=str(file).split("/")[-2]:
-                if not old_file == file:
-                    if os.path.isfile(old_file.name):
-                        os.remove(old_file.name)
+            # old_file = User.objects.get(pk=user.pk).profile_pic.file
+            # # comparing the new file with the old one
+            # file = user.profile_pic.file
+            # print(type(old_file), old_file.name)
+            # if 'defaults'!=str(file).split("/")[-2]:
+            #     if not old_file == file:
+            #         if os.path.isfile(old_file.name):
+            #             os.remove(old_file.name)
+            print(request.data['profile_pic'])
             setattr(user, "profile_pic", request.data['profile_pic'])
             user.save()
 
         if 'cover_pic' in request.data:
-            old_file = User.objects.get(pk=user.pk).cover_pic.file
-            # comparing the new file with the old one
-            file = user.cover_pic.file
-            print(type(old_file), old_file.name)
-            if 'defaults'!=str(file).split("/")[-2]:
-                if not old_file == file:
-                    if os.path.isfile(old_file.name):
-                        os.remove(old_file.name)
+            # old_file = User.objects.get(pk=user.pk).cover_pic.file
+            # # comparing the new file with the old one
+            # file = user.cover_pic.file
+            # print(type(old_file), old_file.name)
+            # if 'defaults'!=str(file).split("/")[-2]:
+            #     if not old_file == file:
+            #         if os.path.isfile(old_file.name):
+            #             os.remove(old_file.name)
+            # print(request.data['cover_pic'])
             setattr(user, "cover_pic", request.data['cover_pic'])
             user.save()
 
@@ -114,7 +116,7 @@ class UserViewset(viewsets.ModelViewSet):
     def delete_cover_pic(self, request, pk=None):
         user = User.objects.get(id=pk)
         user.cover_pic.delete(save=False)
-        user.cover_pic = 'defaults/cover.jpeg'
+        user.cover_pic = 'defaults/cover.jpg'
         user.save()
 
         serializer = UserSerializer(user, many=False)

@@ -110,6 +110,7 @@ class UserFollowingSerializer(serializers.ModelSerializer):
         fields = ['id', 'created', 'following', 'follower', 'no_of_followers']
 
 
+
 """
 FollowingSerializer for particular field for following.
 """
