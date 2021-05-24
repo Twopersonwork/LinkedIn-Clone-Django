@@ -67,9 +67,7 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-@receiver(pre_delete, sender=settings.AUTH_USER_MODEL)
-def photo_delete(sender, instance, **kwargs):
-    cloudinary.uploader.destroy(instance.image.public_id)
+
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
