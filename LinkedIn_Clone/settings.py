@@ -123,11 +123,11 @@ REST_FRAMEWORK = {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'linkedindb',
 #         'USER': 'postgres',
-#         'PASSWORD': '123456',
+#         'PASSWORD': '556232119',
 #         'HOST': '127.0.0.1',
 #     }
 # }
-
+#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
