@@ -1,5 +1,23 @@
 # LinkedIn Clone
 
+## Build :
+
+#### Use [requirements.txt](https://github.com/Twopersonwork/LinkedIn-Clone-Django/blob/main/requirements.txt) and Run :
+
+```
+pip install -r requirements.txt
+```
+
+#### It uses **Postgresql** so do the required setup for that.
+
+#### Run Django side :
+
+```
+python3 manage.py runserver
+```
+
+#### It must be available at localhost:8000 by default.
+
 ### Frontend : [Repo Link](https://github.com/Twopersonwork/LinkedIn-Clone-React)
 
 #### Main API for one user.

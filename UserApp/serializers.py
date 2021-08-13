@@ -60,8 +60,8 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Email already exists")
         return lower_email
 
-    class Meta:
-        model = User
+
+
         fields = ['id', 'username', 'email', 'password', 'date_joined', 'following',
                   'followers', 'posts', 'profile_pic', 'cover_pic','user_profile', 'user_about',
                   'user_education', 'user_license', 'user_skills','activities','waitFollowers']
