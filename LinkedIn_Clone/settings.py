@@ -38,9 +38,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:19006',
-    'https://ditto-linkedin.herokuapp.com',
-    'http://ditto-linkedin.herokuapp.com',
-    'https://ditto-linkedin.vercel.app'
+    'https://ditto-linkedin.vercel.app',
+    'http://ditto-linkedin.vercel.app'
 ]
 
 
