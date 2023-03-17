@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 import cloudinary_storage
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -108,6 +109,7 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# Local db config
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -118,28 +120,23 @@ REST_FRAMEWORK = {
 #     }
 # }
 
+#Hekou database config
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'linkedindb',
-#         'USER': 'postgres',
-#         'PASSWORD': '556232119',
-#         'HOST': '127.0.0.1',
-#     }
+#         'NAME': 'darbt3oa5uom0e',
+#         'USER': 'pyahqwjpallcdp',
+#         'PASSWORD': '3248d0096c43dfa0d9f07ff7333809ce6a82b83044f587cb65484f0011398ba4',
+#         'HOST': 'ec2-34-206-8-52.compute-1.amazonaws.com',
+#         'PORT': '5432',
+#     },
 # }
-#
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'darbt3oa5uom0e',
-        'USER': 'pyahqwjpallcdp',
-        'PASSWORD': '3248d0096c43dfa0d9f07ff7333809ce6a82b83044f587cb65484f0011398ba4',
-        'HOST': 'ec2-34-206-8-52.compute-1.amazonaws.com',
-        'PORT': '5432',
-    },
-}
 
-import dj_database_url
+
+
+
+
+
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
