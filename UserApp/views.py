@@ -261,14 +261,13 @@ class CustomAuthToken(ObtainAuthToken):
                                                context={'request': request})
             print(request.data)
             if serializer.is_valid():
-                print(request.data)
+             
                 user = serializer.validated_data['user']
                 token, created = Token.objects.get_or_create(user=user)
                 user_data = UserSerializer(user).data
                 return Response({
                     'token': token.key,
-
-                    'user': user_data,
+                    'user': user_data
                 })
 
             return Response({"chk_uname_or_pwd": "Please check your Password"},
