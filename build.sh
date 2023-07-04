@@ -5,5 +5,7 @@ set -o errexit
 pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
-python manage.py makemigrations LinkedIn_Clone
+python manage.py makemigrations UserApp
+python manage.py makemigrations PostApp
+python manage.py makemigrations ProfileApp
 python manage.py migrate
